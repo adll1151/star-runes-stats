@@ -183,6 +183,8 @@ td.sr-lown, span.sr-lown { opacity: .42; }
 .sr-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; max-width: 100%; }
 .sr-scroll .sr-table { min-width: 560px; }
 .sr-table td.num, .sr-table th.num { text-align: right; font-family: var(--sr-mono); }
+.sr-table td.sr-est::after { content: " 추정"; font-family: var(--font-anthropic-sans); font-size: 11px; color: var(--sr-muted); }
+.sr-table td.sr-ind { text-align: left; white-space: nowrap; color: var(--sr-muted); }
 .sr-table td.pos { color: var(--sr-ok); } .sr-table td.neg { color: var(--sr-bad); }
 .sr-table tr.hl td:first-child { color: var(--sr-gold); }
 .sr-seg.wrap { flex-wrap: wrap; margin-left: 0; }
@@ -389,9 +391,9 @@ td.sr-lown, span.sr-lown { opacity: .42; }
 
     <section class="sr-card" id="rs-runes">
       <h2>룬별 선택·승률·딜 비중</h2>
-      <div class="note">고른 비율 = 그 룬을 각인한 런 ÷ 전체 런. 승률 차이는 2막을 넘긴 런끼리 "있을 때 − 없을 때"(양쪽 다 10런 이상일 때만 색). 딜 비중 = 그 런 전체 피해 중 이 룬 몫의 중앙값(피해를 안 주는 룬은 0). 극단 런 = 이 룬 혼자 피해 50% 이상. 한 명 비중이 높으면 한 사람 플레이에 끌려간 값입니다.</div>
+      <div class="note">고른 비율 = 그 룬을 각인한 런 ÷ 전체 런. 승률 차이는 2막을 넘긴 런끼리 "있을 때 − 없을 때"(양쪽 다 10런 이상일 때만 색). 딜 비중 = 그 런 전체 피해 중 이 룬 몫의 중앙값. 독을 거는 룬(금성)은 독 피해를 더해 계산하고, 정확한 독 피해 기록이 없으면 건 독 수를 독 피해의 최소치로 씁니다(“추정” 표시: 독은 적 턴마다 쌓인 수만큼 피해 후 1씩 줄어서 실제 피해는 이보다 같거나 큼). 간접 기여 = 런당 평균으로 건 독·해로운 효과·드로우·에너지·버프(피해를 안 주는 룬도 여기서 보입니다). 극단 런 = 이 룬 혼자 피해 50% 이상. 한 명 비중이 높으면 한 사람 플레이에 끌려간 값입니다.</div>
       <div class="sr-scroll"><table class="sr-table" data-source="runestat" data-row-key="k">
-        <thead><tr><th data-field="name">룬</th><th class="num" data-field="n">고른 런</th><th class="num" data-field="pick_pct">고른 비율 %</th><th class="num" data-field="win_with">있을 때 승률 %</th><th class="num" data-field="win_without">없을 때 %</th><th class="num" data-field="win_delta_a2">차이(2막 넘김)</th><th class="num" data-field="share_med">딜 비중 중앙 %</th><th class="num" data-field="share_max">최고 %</th><th class="num" data-field="extreme">극단 런</th><th class="num" data-field="prism_pct">프리즘 %</th><th class="num" data-field="top_player_pct">한 명 비중 %</th></tr></thead>
+        <thead><tr><th data-field="name">룬</th><th class="num" data-field="n">고른 런</th><th class="num" data-field="pick_pct">고른 비율 %</th><th class="num" data-field="win_with">있을 때 승률 %</th><th class="num" data-field="win_without">없을 때 %</th><th class="num" data-field="win_delta_a2">차이(2막 넘김)</th><th class="num" data-field="share_med">딜 비중 중앙 %</th><th class="num" data-field="share_max">최고 %</th><th data-field="indirect">간접 기여(런당)</th><th class="num" data-field="extreme">극단 런</th><th class="num" data-field="prism_pct">프리즘 %</th><th class="num" data-field="top_player_pct">한 명 비중 %</th></tr></thead>
         <tbody id="rs-runes-body"></tbody>
       </table></div>
     </section>
@@ -946,12 +948,12 @@ dash.calc('flags', {
     const bug = fbtag.find(r => r.tag === 'bug' && r.kind === 'n' && r.ver === 'ALL' && r.lang === 'ALL');
     if (bug) out.push({ score: 4, level: 'bad', title: `버그 태그 ${bug.n}건`, text: '게임 속 피드백에서 "버그·이상함"을 고른 런. 아래 피드백 칸에서 버그만 골라 보세요.', n: N(bug.n) });
     const trap = R.filter(r => ok(r) && N(r.pick_pct) >= 15 && N(r.win_delta_a2) <= 0);
-    trap.forEach(r => out.push({ score: 3.5, level: 'warn', rid: r.rid, title: `많이 고르는데 승률엔 안 보임: ${r.name}`, text: `${r.pick_pct}% 런에서 고름, 2막 넘긴 런 기준 승률 차이 ${r.win_delta_a2}pt (n=${r.n}).`, n: N(r.n) }));
+    trap.forEach(r => out.push({ score: 3.5, level: 'warn', rid: r.rid, title: `많이 고르는데 승률엔 안 보임: ${r.name}`, text: `${r.pick_pct}% 런에서 고름, 2막 넘긴 런 기준 승률 차이 ${r.win_delta_a2}pt (n=${r.n}).` + (r.indirect ? ` 간접 기여는 있음: ${r.indirect}.` : ''), n: N(r.n) }));
     R.filter(r => N(r.n) >= 10 && N(r.share_med) >= 15).forEach(r => {
-      const t = `딜 비중 중앙값 ${r.share_med}%, 최고 ${r.share_max}%, 혼자 50% 넘은 극단 런 ${r.extreme}개.`;
+      const t = `딜 비중 중앙값 ${r.share_med}%, 최고 ${r.share_max}%, 혼자 50% 넘은 극단 런 ${r.extreme}개.` + (r.poison_est ? ' (독 피해 추정 포함: 건 독 수를 최소치로)' : (Number(r.pdmg_avg) > 0 ? ' (독 피해 포함)' : ''));
       const f = out.find(x => x.rid === r.rid);
       if (f) { f.text += ' ' + t; f.title += ' · 딜은 몰림'; f.score += 0.5; }
-      else out.push({ score: 3, level: 'warn', title: `딜이 한 룬에 몰림: ${r.name}`, text: t + ` (n=${r.n})`, n: N(r.n) });
+      else out.push({ score: 3, level: 'warn', title: `딜이 한 룬에 몰림: ${r.name}` + (r.poison_est ? ' (추정)' : ''), text: t + ` (n=${r.n})`, n: N(r.n) });
     });
     const strong = R.filter(r => ok(r) && N(r.win_delta_a2) >= 15).sort((a, b) => N(b.win_delta_a2) - N(a.win_delta_a2));
     if (strong.length) out.push({ score: 3.4, level: 'warn', title: `너무 셀 수 있는 룬 ${strong.length}개`, text: strong.slice(0, 4).map(r => `${r.name} +${r.win_delta_a2}pt(n=${r.n})`).join(', ') + ' — 2막을 넘긴 런끼리 비교한 승률 차이.', n: Math.min(...strong.map(r => N(r.n))) });
@@ -974,7 +976,7 @@ dash.calc('flags', {
     }
     if (N(S.runs) >= 50) {
       const rare = R.filter(r => N(r.pick_pct) < 3);
-      if (rare.length) out.push({ score: 1.5, level: 'info', title: `거의 안 고르는 룬 ${rare.length}개`, text: rare.map(r => `${r.name} ${r.pick_pct}%`).join(', ') + ' — 상점에 잘 안 뜨는지, 골라도 매력이 없는지 확인.', n: N(S.runs) });
+      if (rare.length) out.push({ score: 1.5, level: 'info', title: `거의 안 고르는 룬 ${rare.length}개`, text: rare.map(r => `${r.name} ${r.pick_pct}%` + (r.indirect ? `(간접: ${r.indirect})` : '')).join(', ') + ' — 상점에 잘 안 뜨는지, 골라도 매력이 없는지 확인.', n: N(S.runs) });
     }
     return out.sort((a, b) => b.score - a.score).slice(0, 5).map((f, i) => ({ rank: i + 1, level: f.level, title: f.title, text: f.text, n: f.n }));
   }
@@ -1099,11 +1101,13 @@ dash.calc('flags', {
     document.getElementById('rs-kv').classList.toggle('sr-lown', !!cur && Number(cur.runs) < 10);
     if (S.status === 'ok') rowsTable('rs-ver-body', S.data.slice().sort((a, b) => LAB_ORDER(a.lab).localeCompare(LAB_ORDER(b.lab))), ['lab', 'runs', 'players', 'win_pct', 'act2_pct', 'act3_pct', 'dust_med', 'crack_pct', 'fb'],
       { key: 'lab', empty: '기록 없음', first: r => labName(r.lab), low: r => Number(r.runs) < 10, hl: r => r.lab === st.lab });
-    if (R.status === 'ok') rowsTable('rs-runes-body', R.data.filter(r => r.lab === st.lab), ['name', 'n', 'pick_pct', 'win_with', 'win_without', 'win_delta_a2', 'share_med', 'share_max', 'extreme', 'prism_pct', 'top_player_pct'], {
+    if (R.status === 'ok') rowsTable('rs-runes-body', R.data.filter(r => r.lab === st.lab), ['name', 'n', 'pick_pct', 'win_with', 'win_without', 'win_delta_a2', 'share_med', 'share_max', 'indirect', 'extreme', 'prism_pct', 'top_player_pct'], {
       key: 'k', empty: '이 버전에는 룬 기록이 없습니다', low: r => Number(r.n) < 10,
       cell: (c, r, td) => {
         if (c === 'win_delta_a2') { const ok = Number(r.n2) >= 10 && Number(r.n2_without) >= 10, v = Number(r.win_delta_a2); if (!ok) td.classList.add('sr-lown'); else if (v >= 5) td.classList.add('pos'); else if (v <= -5) td.classList.add('neg'); if (r.win_delta_a2 != null && v > 0) td.textContent = '+' + fmt(v); }
         if (c === 'win_without' && Number(r.n_without) < 10) td.classList.add('sr-lown');
+        if ((c === 'share_med' || c === 'share_max') && r.poison_est && Number(r[c]) > 0) td.classList.add('sr-est');
+        if (c === 'indirect') { td.classList.remove('num'); td.classList.add('sr-ind'); }
         if (c === 'top_player_pct' && Number(r.top_player_pct) >= 50) td.classList.add('neg');
         if (c === 'extreme' && Number(r.extreme) > 0) td.classList.add('neg');
       }
@@ -1118,7 +1122,7 @@ dash.calc('flags', {
       key: 'k', empty: '기록 없음', low: r => Number(r.runs) < 10, hl: r => r.chr === 'ALL',
       cell: (c, r, td) => { if (/_pct$/.test(c) && r[c] != null) td.style.background = `linear-gradient(to left, var(--sr-goldsoft) ${Math.max(0, Math.min(100, Number(r[c])))}%, transparent 0)`; }
     });
-    [['rs-ver-body', S], ['rs-runes-body', R], ['rs-skies-body', K], ['rs-chr-body', F]].forEach(([id, D]) => { if (D.status === 'error') { const b = document.getElementById(id); b.innerHTML = ''; const tr = el('tr'), td = el('td', 'sr-empty', '불러오지 못했습니다'); td.colSpan = 11; tr.appendChild(td); b.appendChild(tr); } else if (D.status !== 'ok') document.getElementById(id).innerHTML = ''; });
+    [['rs-ver-body', S], ['rs-runes-body', R], ['rs-skies-body', K], ['rs-chr-body', F]].forEach(([id, D]) => { if (D.status === 'error') { const b = document.getElementById(id); b.innerHTML = ''; const tr = el('tr'), td = el('td', 'sr-empty', '불러오지 못했습니다'); td.colSpan = 12; tr.appendChild(td); b.appendChild(tr); } else if (D.status !== 'ok') document.getElementById(id).innerHTML = ''; });
   }
 
   dash.onData(() => { drawWatch(); drawFeedbackGame(); drawRuns(); });
