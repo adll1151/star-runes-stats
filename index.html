@@ -135,7 +135,7 @@ function table(cols, rows, lowFn, barCol){
 
 // plain SVG line chart over time
 function lineChart(el, series, opt){
-  const W = 900, H = opt.h || 260, L = 44, R = 12, T = 46, B = 26;
+  const W = Math.round(Math.max(300, el.clientWidth || 900)), H = Math.round((opt.h || 260) * (W < 600 ? 0.85 : 1)), L = 44, R = 12, T = 46, B = 26;
   const pts = series.flatMap(s => s.data.filter(d => d.y != null));
   if (!pts.length){ el.innerHTML = `<p class="note">아직 데이터가 없습니다.</p>`; return; }
   const x0 = Math.min(...pts.map(d => d.x)), x1 = Math.max(...pts.map(d => d.x), x0 + 3600e3);
@@ -154,9 +154,11 @@ function lineChart(el, series, opt){
   }
   // x ticks: each KST midnight
   const day = 86400e3, off = 9 * 3600e3;
-  for (let t = Math.ceil((x0 + off) / day) * day - off; t <= x1; t += day){
+  const every = Math.max(1, Math.ceil(46 / (sx(x0 + day) - sx(x0))));
+  let k = 0;
+  for (let t = Math.ceil((x0 + off) / day) * day - off; t <= x1; t += day, k++){
     g += `<line x1="${sx(t)}" x2="${sx(t)}" y1="${T}" y2="${H - B}" stroke="var(--grid)"/>`;
-    g += `<text x="${sx(t)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="var(--muted)">${kst(new Date(t).toISOString(), {month:"numeric", day:"numeric"})}</text>`;
+    if (k % every === 0) g += `<text x="${sx(t)}" y="${H - 8}" text-anchor="middle" font-size="11" fill="var(--muted)">${kst(new Date(t).toISOString(), {month:"numeric", day:"numeric"})}</text>`;
   }
   // release markers
   (opt.marks || []).forEach((m, i) => {
@@ -256,8 +258,10 @@ function render(d){
   ], r.feedback_tags, null, "n") : `<p class="note">아직 없습니다.</p>`;
 }
 
+let data = null, rt = 0;
+addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => data && render(data), 200); });
 fetch(API, {cache: "no-cache"}).then(res => { if (!res.ok) throw new Error(res.status); return res.json(); })
-  .then(render)
+  .then(d => { data = d; render(d); })
   .catch(() => { $("updated").innerHTML = `<span class="err">데이터를 불러오지 못했습니다. 잠시 뒤 새로고침해 주세요.</span>`; });
 })();
 </script>
