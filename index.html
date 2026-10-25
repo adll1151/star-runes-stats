@@ -163,7 +163,7 @@ function lineChart(el, series, opt){
     const t = Date.parse(m.at); if (t < x0 || t > x1) return;
     const x = sx(t);
     g += `<line x1="${x}" x2="${x}" y1="${T - 4}" y2="${H - B}" stroke="var(--mark)" stroke-dasharray="4 3" stroke-width="1.5"/>`;
-    const anchor = x > W - 160 ? "end" : "start", dx = anchor === "end" ? -4 : 4;
+    const anchor = x > W - 130 ? "end" : "start", dx = anchor === "end" ? -4 : 4;
     g += `<text x="${x + dx}" y="${12 + (i % 3) * 13}" text-anchor="${anchor}" font-size="11" font-weight="600" fill="var(--mark)">${esc(m.label)}</text>`;
   });
   // lines (break on gaps > 3h or nulls)
