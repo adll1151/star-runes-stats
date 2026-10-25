@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>별의 룬 모드 소개</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{--night:#0b0e18;--paper:#131828;--ink:#e6e2d6;--muted:#8f97ad;--line:#263049;--gold:#e8c46a;--goldsoft:#e8c46a1f}
+*{box-sizing:border-box}body{margin:0;background:var(--night);color:var(--ink);font:16px/1.7 'Noto Sans KR',sans-serif}
+main{max-width:760px;margin:0 auto;padding:24px 16px 64px}
+h1{font:500 30px/1.3 'Noto Serif KR',serif;margin:8px 0 4px}h2{font-size:20px;font-weight:700;margin:44px 0 12px;color:var(--gold)}
+.meta{color:var(--muted);font-size:14px}a{color:var(--gold)}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px;overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-weight:500}
+ol li,ul li{margin:6px 0}svg{width:100%;height:auto;display:block}
+nav{display:flex;gap:16px;font-size:14px;flex-wrap:wrap}
+figure{margin:16px 0}figure img{width:100%;height:auto;display:block;border-radius:10px;border:1px solid var(--line)}
+figcaption{color:var(--muted);font-size:13px;margin-top:6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px}
+.grid figure{margin:0}
+.hero{max-width:448px;margin:16px auto}
+</style></head><body><main>
+<nav><a href="./">← 통계 보기</a><a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3820170031">스팀 창작마당</a></nav>
+<h1>별의 룬 모드 소개</h1>
+<p class="meta">처음 보는 사람을 위한 안내 · 2026-10-25</p>
+<p>별의 룬은 카드 게임 '슬레이 더 스파이어 2'에 별자리 룬 시스템을 더하는 모드입니다. 싸워서 별가루를 모으고, 그걸로 룬을 사서 카드에 새기고, 같은 별자리 룬을 모아 각성시키는 재미를 더합니다.</p>
+<figure class="hero"><img src="img/reel.gif" alt="별의 룬 1.14 소개 영상" loading="lazy"><figcaption>창작마당 대표 영상 (v1.14)</figcaption></figure>
+
+<h2>먼저, 슬레이 더 스파이어 2는 어떤 게임인가요</h2>
+<p>카드로 싸우며 탑을 오르는 게임입니다. 한 판은 1~2시간이고, 지면 처음부터 다시 시작합니다.</p>
+<ul>
+<li>탑은 여러 막(층 묶음)으로 되어 있고, 각 막 끝에 보스가 있습니다.</li>
+<li>지도에서 갈 길을 고릅니다: 일반 전투, 강한 적(엘리트), 물음표 방(이벤트), 휴식처, 상점, 보물.</li>
+<li>전투는 턴제입니다. 매 턴 에너지 3으로 손에 든 카드를 냅니다. 공격 카드로 때리고, 방어 카드로 이번 턴 받을 피해를 막습니다.</li>
+<li>적은 다음에 무엇을 할지 머리 위에 미리 보여 줍니다. 그걸 보고 공격할지 막을지 정합니다.</li>
+<li>이기면 새 카드를 하나 골라 덱에 넣습니다. 덱이 점점 강해지는 것이 핵심 재미입니다.</li>
+<li>아이언클래드, 사일런트 같은 캐릭터마다 쓰는 카드가 다릅니다.</li>
+</ul>
+<figure><img src="img/combat.jpg" alt="전투 화면" loading="lazy"><figcaption>전투 화면: 아래에 손패, 오른쪽에 적. 룬을 새긴 카드에는 별 표시가 붙습니다.</figcaption></figure>
+
+<h2>별의 룬이 더하는 것</h2>
+<p>기본 게임의 카드 싸움은 그대로 두고, 그 위에 '룬'을 모아 카드를 강하게 만드는 순환을 하나 더 얹습니다.</p>
+<div class="card">
+<svg viewBox="0 0 760 300" role="img" aria-label="싸울수록 룬이 쌓이고, 별자리가 차면 각성합니다" font-family="Noto Sans KR, sans-serif" font-size="13">
+<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#8f97ad"/></marker></defs>
+<text x="24" y="36" font-size="15" font-weight="700" fill="#e6e2d6">싸울수록 룬이 쌓이고, 별자리가 차면 각성합니다</text>
+<g fill="none" stroke="#8f97ad" stroke-width="1.25">
+<path d="M180 104H204" marker-end="url(#ar)"/><path d="M362 104H386" marker-end="url(#ar)"/><path d="M544 104H568" marker-end="url(#ar)"/>
+<path d="M648 132V190" marker-end="url(#ar)"/><path d="M570 220H546" marker-end="url(#ar)"/><path d="M388 220H364" marker-end="url(#ar)"/>
+<path d="M206 220H102V134" marker-end="url(#ar)"/></g>
+<g stroke="#8f97ad" stroke-width="1.25" fill="none">
+<rect x="24" y="76" width="156" height="56" rx="8"/><rect x="206" y="76" width="156" height="56" rx="8"/><rect x="388" y="76" width="156" height="56" rx="8"/><rect x="570" y="76" width="156" height="56" rx="8"/>
+<rect x="570" y="192" width="156" height="56" rx="8"/><rect x="388" y="192" width="156" height="56" rx="8"/></g>
+<rect x="206" y="192" width="156" height="56" rx="8" fill="#e8c46a1f" stroke="#e8c46a" stroke-width="2"/>
+<g text-anchor="middle" font-weight="700" fill="#e6e2d6">
+<text x="102" y="100">전투에서 승리</text><text x="284" y="100">별가루 얻기</text><text x="466" y="100">룬 사기</text><text x="648" y="100">카드에 새기기</text>
+<text x="648" y="216">쓰면 룬 발동</text><text x="466" y="216">별자리 모으기</text><text x="284" y="216">별자리 각성</text></g>
+<g text-anchor="middle" font-size="11.5" fill="#8f97ad">
+<text x="102" y="119">카드로 적을 쓰러뜨림</text><text x="284" y="119">모드의 화폐</text><text x="466" y="119">보스 뒤 별 상점에서</text><text x="648" y="119">룬을 카드에 붙임</text>
+<text x="648" y="235">카드 효과에 더해짐</text><text x="466" y="235">불꽃·물결·하늘</text><text x="284" y="235">큰 효과가 켜짐</text></g>
+<text x="112" y="190" font-size="11.5" fill="#8f97ad">더 강해진 덱으로</text>
+<text x="24" y="280" font-size="11.5" fill="#8f97ad">두 별자리의 룬을 함께 가지면 둘을 합친 연성 룬도 새길 수 있습니다.</text>
+</svg></div>
+<p>한 바퀴를 돌 때마다 덱이 강해지고, 같은 별자리 룬을 다섯 가지 모으면 그 별자리가 각성합니다.</p>
+<div class="grid">
+<figure><img src="img/shop.jpg" alt="별 상점" loading="lazy"><figcaption>별 상점: 별가루로 룬을 삽니다.</figcaption></figure>
+<figure><img src="img/engrave.jpg" alt="카드에 룬 새기기" loading="lazy"><figcaption>새기기: 산 룬을 덱의 카드 한 장에 붙입니다.</figcaption></figure>
+<figure><img src="img/synergy.jpg" alt="별자리 화면" loading="lazy"><figcaption>별자리: 불꽃·물결·하늘별로 모인 룬과 다음 단계.</figcaption></figure>
+<figure><img src="img/linked.jpg" alt="연성 룬" loading="lazy"><figcaption>연성 룬: 두 별자리를 이어 만드는 합체 룬.</figcaption></figure>
+</div>
+<figure><img src="img/awaken.gif" alt="각성한 별자리로 싸우는 장면" loading="lazy"><figcaption>각성: 별자리가 차면 캐릭터 둘레에 빛이 두르고 큰 효과가 켜집니다.</figcaption></figure>
+
+<h2>꼭 알아야 할 말들</h2>
+<div class="card"><table>
+<tr><th>말</th><th>뜻</th><th>비유</th></tr>
+<tr><td>별가루</td><td>전투에서 이기면 받는 모드 전용 화폐</td><td>용돈</td></tr>
+<tr><td>룬</td><td>카드에 붙이는 별 모양 능력. 예: 피해 추가, 방어도, 독</td><td>카드에 끼우는 보석</td></tr>
+<tr><td>각인(새기기)</td><td>산 룬을 내 덱의 카드 한 장에 붙이는 것</td><td>보석을 박기</td></tr>
+<tr><td>별 상점·별의 제단</td><td>룬을 사는 곳. 보스를 잡은 뒤 열림</td><td>보석 가게</td></tr>
+<tr><td>레벨</td><td>같은 룬을 키우면 Lv1 → Lv3까지 강해짐</td><td>강화</td></tr>
+<tr><td>별자리(하우스)</td><td>룬의 묶음. 불꽃·물결·하늘 세 가지</td><td>보석의 색깔</td></tr>
+<tr><td>각성</td><td>같은 별자리 룬을 여러 개 모으면 켜지는 큰 효과</td><td>세트 효과</td></tr>
+<tr><td>연성 룬</td><td>두 별자리의 룬을 함께 가졌을 때 새길 수 있는 합체 룬</td><td>조합 아이템</td></tr>
+<tr><td>하늘</td><td>막을 시작할 때 세 가지 중 하나를 골라 그 막 전체에 거는 규칙</td><td>그날의 날씨</td></tr>
+<tr><td>별자리표</td><td>첫 전투에서 받는 유물. 룬 시스템이 이걸로 켜짐</td><td>보석함</td></tr>
+</table></div>
+
+<h2>한 판은 이렇게 흘러갑니다</h2>
+<ol>
+<li>캐릭터를 골라 탑을 오르기 시작합니다. 1막의 하늘 세 개 중 하나를 고릅니다.</li>
+<li>첫 전투에서 별자리표를 받고, 첫 선물로 룬 하나를 공짜로 골라 카드에 새깁니다.</li>
+<li>싸울 때마다 별가루가 모입니다. 룬을 새긴 카드를 내면 룬 효과가 함께 발동합니다.</li>
+<li>막 보스를 잡으면 별 상점이 열립니다. 모은 별가루로 룬을 사고, 어떤 카드에 새길지 정합니다.</li>
+<li>같은 별자리 룬이 모일수록 별자리가 밝아지고, 충분히 모이면 각성합니다.</li>
+<li>두 별자리의 룬을 함께 가지면 연성 룬을 노려 볼 수 있습니다.</li>
+<li>마지막 보스까지 이기면 승리, 지면 처음부터 다시 합니다. 끝나면 '별자리 기록'에서 어떤 룬이 얼마나 활약했는지 봅니다.</li>
+</ol>
+<div class="grid">
+<figure><img src="img/sky.jpg" alt="하늘 고르기" loading="lazy"><figcaption>1. 막마다 하늘을 고릅니다.</figcaption></figure>
+<figure><img src="img/gift.jpg" alt="첫 선물" loading="lazy"><figcaption>2. 첫 선물로 룬 하나를 공짜로 받습니다.</figcaption></figure>
+<figure><img src="img/meter.jpg" alt="전투 중 룬 딜량" loading="lazy"><figcaption>3. 전투 중에는 룬이 낸 피해를 실시간으로 봅니다.</figcaption></figure>
+<figure><img src="img/record.jpg" alt="별자리 기록" loading="lazy"><figcaption>7. 판이 끝나면 별자리 기록으로 되돌아봅니다.</figcaption></figure>
+</div>
+<figure><img src="img/play.gif" alt="플레이 영상" loading="lazy"><figcaption>실제 플레이: 룬을 새긴 카드를 내면 룬 효과가 함께 터집니다.</figcaption></figure>
+<p>친구와 함께 하는 협동 모드에서도 쓸 수 있습니다. 두 사람이 같은 버전을 써야 합니다.</p>
+
+<h2>지금 모드 현황</h2>
+<p>최신 숫자는 <a href="./">통계 페이지</a>에서 실시간으로 볼 수 있습니다. 최신 버전은 v1.14.0(2026년 10월 24일 배포)입니다.</p>
+</main></body></html>
